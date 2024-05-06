@@ -184,8 +184,6 @@ if(BUILD_EXAMPLES)
             RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
         )
 
-
-
         ##### Control Example
         set(CONTROL_EXAMPLE ${PROJECT_NAME}_control_example)
         add_executable(${CONTROL_EXAMPLE} "${PROJECT_SOURCE_DIR}/examples/zed_oc_control_example.cpp")
@@ -233,6 +231,19 @@ if(BUILD_EXAMPLES)
               ${OpenCV_LIBS}
             )
         endif()
+
+        ##### Take PNG Snapshots
+        set(PNG_SNAPSHOT_APP ${PROJECT_NAME}_snapshot_img)
+        add_executable(${PNG_SNAPSHOT_APP} "${PROJECT_SOURCE_DIR}/examples/tools/zed_oc_snapshot_img.cpp")
+        set_target_properties(${PNG_SNAPSHOT_APP} PROPERTIES PREFIX "")
+        set_property(TARGET ${PNG_SNAPSHOT_APP} PROPERTY POSITION_INDEPENDENT_CODE ON)
+        target_link_libraries(${PNG_SNAPSHOT_APP}
+          ${PROJECT_NAME}
+          ${OpenCV_LIBS}
+        )
+        install(TARGETS ${PNG_SNAPSHOT_APP}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+        )
 
         ##### Depth Tune Stereo
         set(STEREO_TUNE_APP ${PROJECT_NAME}_depth_tune_stereo)
