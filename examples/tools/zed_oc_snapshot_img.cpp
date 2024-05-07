@@ -22,6 +22,7 @@
 #include "videocapture.hpp"
 #include "ocv_display.hpp"
 
+#include <filesystem>
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -39,9 +40,11 @@ int main(int argc, char *argv[])
         std::cerr << "Explicit output directory must be specified per session." << std::endl;
         return EXIT_FAILURE;
     }
+    std::filesystem::path output_dir = argv[1];
+    std::filesystem::create_directories(output_dir);
+    std::cout << "Output in: " << output_dir << std::endl;
     // <---- Process command line
 
-    char output_name_buf[4096];
     int capture_count = 0;
 
     sl_oc::video::VideoParams params;
@@ -113,9 +116,9 @@ int main(int argc, char *argv[])
         if(key=='q' || key=='Q') { // Quit
             break;
         } else if(key == ' ') {
-            std::snprintf(output_name_buf, sizeof(output_name_buf), "%s/frame_%d.png", argv[1], capture_count++);
-            cv::imwrite(output_name_buf, frameBGR);
-            std::cout << "[PNG] Created \"" << output_name_buf << "\", counter = " << capture_count << std::endl;
+            std::string output_file = "frame_" + std::to_string(capture_count++) + ".png";
+            cv::imwrite(output_dir / output_file, frameBGR);
+            std::cout << "[PNG" << capture_count << "] Created: " << output_file << std::endl;
         }
         // <---- Keyboard handling
     }
